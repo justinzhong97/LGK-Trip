@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LGK Trip – Literal Transfers</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0f0f0f;
+    font-family: 'DM Sans', sans-serif;
+    color: #f0ece4;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+  }
+  .page {
+    width: 640px;
+    background: #151515;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .header {
+    background: #1a1a1a;
+    border-bottom: 1px solid #2a2a2a;
+    padding: 28px 32px 24px;
+  }
+  .trip-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #666;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .header-top { display: flex; align-items: flex-start; justify-content: space-between; }
+  .trip-title { font-size: 22px; font-weight: 600; color: #f0ece4; letter-spacing: -0.02em; }
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
+  .badge-explain { background: #2a1f35; color: #b08ad9; }
+
+  .body { padding: 0 32px 32px; }
+  .section { margin-top: 28px; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #222;
+  }
+
+  /* Transfer block */
+  .transfer-block {
+    border: 1px solid #222;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .transfer-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: #1a1a1a;
+    gap: 10px;
+  }
+  .t-from { font-size: 14px; font-weight: 500; color: #e8e4dc; }
+  .t-arrow { color: #444; font-size: 14px; flex: 1; text-align: center; }
+  .t-to { font-size: 14px; font-weight: 500; color: #e8e4dc; }
+  .t-total {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    color: #c8f07b;
+    margin-left: auto;
+  }
+
+  .transfer-items { padding: 4px 0; background: #131313; }
+  .item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 16px;
+    border-top: 1px solid #1a1a1a;
+  }
+  .item-row:first-child { border-top: none; }
+  .item-name { font-size: 12px; color: #666; }
+  .item-who { font-size: 11px; color: #444; margin-top: 1px; }
+  .item-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: #888;
+  }
+  .item-row.subtotal {
+    border-top: 1px solid #222;
+    margin-top: 2px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  .item-row.subtotal .item-name { color: #aaa; font-weight: 500; }
+  .item-row.net-row { background: #1a1a1a; border-top: 1px solid #222; }
+  .item-row.net-row .item-name { color: #c8c4bc; }
+  .item-row.net-row .item-amount { color: #c8f07b; }
+  .minus { color: #e07070; }
+
+  /* Cross debt note */
+  .cross-note {
+    background: #1a1520;
+    border: 1px solid #2d1f3d;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: #8a70a8;
+    line-height: 1.6;
+  }
+  .cross-note strong { color: #b08ad9; font-weight: 500; }
+
+  .footer {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid #1f1f1f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-label { font-family: 'DM Mono', monospace; font-size: 10px; color: #333; letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="trip-label">Group trip · Langkawi</div>
+    <div class="header-top">
+      <div class="trip-title">Literal Transfer Breakdown</div>
+      <div class="badge badge-explain">5 transfers</div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div class="section">
+      <div class="section-label">Who pays who & why</div>
+
+      <!-- Transfer 1: JA → JP -->
+      <div class="transfer-block">
+        <div class="transfer-header">
+          <span class="t-from">Jimmy & Annabel</span>
+          <span class="t-arrow">→</span>
+          <span class="t-to">Justin & Phoebe</span>
+          <span class="t-total">$135.02</span>
+        </div>
+        <div class="transfer-items">
+          <div class="item-row">
+            <div><div class="item-name">Wonderland</div><div class="item-who">Jimmy $13.11 + Annabel $13.11</div></div>
+            <div class="item-amount">$26.22</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">Pinang</div><div class="item-who">Jimmy only</div></div>
+            <div class="item-amount">$48.59</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">Golden Bamboo</div><div class="item-who">Annabel only</div></div>
+            <div class="item-amount">$16.13</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">Howdy</div><div class="item-who">Jimmy $22.04 + Annabel $22.04</div></div>
+            <div class="item-amount">$44.08</div>
+          </div>
+          <div class="item-row subtotal">
+            <div class="item-name">Total owed to Justin</div>
+            <div class="item-amount" style="color:#c8f07b">$135.02</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transfer 2: JA → EJ -->
+      <div class="transfer-block">
+        <div class="transfer-header">
+          <span class="t-from">Jimmy & Annabel</span>
+          <span class="t-arrow">→</span>
+          <span class="t-to">Evangel & Jess</span>
+          <span class="t-total">$291.86</span>
+        </div>
+        <div class="transfer-items">
+          <div class="item-row">
+            <div><div class="item-name">Jet Ski</div><div class="item-who">Jimmy only</div></div>
+            <div class="item-amount">$224.00</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">Roti</div><div class="item-who">Jimmy $4.22 + Annabel $4.22</div></div>
+            <div class="item-amount">$8.43</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">Car Rent + Fuel</div><div class="item-who">Jimmy $29.71 + Annabel $29.71</div></div>
+            <div class="item-amount">$59.43</div>
+          </div>
+          <div class="item-row subtotal">
+            <div class="item-name">Total owed to Evangel</div>
+            <div class="item-amount" style="color:#c8f07b">$291.86</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transfer 3: Ivan → JP -->
+      <div class="transfer-block">
+        <div class="transfer-header">
+          <span class="t-from">Ivan</span>
+          <span class="t-arrow">→</span>
+          <span class="t-to">Justin & Phoebe</span>
+          <span class="t-total">$161.26</span>
+        </div>
+        <div class="transfer-items">
+          <div class="item-row">
+            <div><div class="item-name">Old Town</div></div>
+            <div class="item-amount">$6.06</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">Yasmin</div></div>
+            <div class="item-amount">$4.45</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">Fish Farm</div></div>
+            <div class="item-amount">$67.01</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">Wonderland</div></div>
+            <div class="item-amount">$13.11</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">Pinang</div></div>
+            <div class="item-amount">$48.59</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">Howdy</div></div>
+            <div class="item-amount">$22.04</div>
+          </div>
+          <div class="item-row subtotal">
+            <div class="item-name">Total owed to Justin</div>
+            <div class="item-amount" style="color:#c8f07b">$161.26</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transfer 4: Ivan → EJ -->
+      <div class="transfer-block">
+        <div class="transfer-header">
+          <span class="t-from">Ivan</span>
+          <span class="t-arrow">→</span>
+          <span class="t-to">Evangel & Jess</span>
+          <span class="t-total">$257.93</span>
+        </div>
+        <div class="transfer-items">
+          <div class="item-row">
+            <div><div class="item-name">Jet Ski</div></div>
+            <div class="item-amount">$224.00</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">Roti</div></div>
+            <div class="item-amount">$4.22</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">Car Rent + Fuel</div></div>
+            <div class="item-amount">$29.71</div>
+          </div>
+          <div class="item-row subtotal">
+            <div class="item-name">Total owed to Evangel</div>
+            <div class="item-amount" style="color:#c8f07b">$257.93</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transfer 5: JP → EJ (cross debt) -->
+      <div class="cross-note">
+        <strong>Why do Justin & Phoebe pay Evangel & Jess?</strong><br>
+        Justin paid for Evangel & Jess's meals → EJ owe JP $229.85.<br>
+        Evangel paid for Justin's Jet Ski, Roti & Car → JP owe EJ $291.86.<br>
+        These cross-debts cancel down to a net payment of $62.01 from JP to EJ.
+      </div>
+      <div class="transfer-block">
+        <div class="transfer-header">
+          <span class="t-from">Justin & Phoebe</span>
+          <span class="t-arrow">→</span>
+          <span class="t-to">Evangel & Jess</span>
+          <span class="t-total">$62.01</span>
+        </div>
+        <div class="transfer-items">
+          <div class="item-row">
+            <div><div class="item-name">JP owe EJ (Jet Ski $224.00 + Roti $8.43 + Car $59.43)</div></div>
+            <div class="item-amount">$291.86</div>
+          </div>
+          <div class="item-row">
+            <div><div class="item-name">EJ owe JP (their share of Justin's meals)</div></div>
+            <div class="item-amount minus">−$229.85</div>
+          </div>
+          <div class="item-row net-row">
+            <div class="item-name">Net transfer JP → EJ</div>
+            <div class="item-amount">$62.01</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <div class="footer-label">LGK · Literal transfer breakdown · All amounts in AUD</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

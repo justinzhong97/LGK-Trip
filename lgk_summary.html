@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LGK Trip Payments</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0f0f0f;
+    font-family: 'DM Sans', sans-serif;
+    color: #f0ece4;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+  }
+  .page {
+    width: 640px;
+    background: #151515;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .header {
+    background: #1a1a1a;
+    border-bottom: 1px solid #2a2a2a;
+    padding: 28px 32px 24px;
+  }
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .trip-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #666;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .trip-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #f0ece4;
+    letter-spacing: -0.02em;
+  }
+  .currency-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: #c8f07b;
+    color: #1a1a1a;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
+  .body { padding: 0 32px 32px; }
+
+  /* Section */
+  .section { margin-top: 28px; }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #222;
+  }
+
+  /* Items table */
+  .items-table { width: 100%; border-collapse: collapse; }
+  .items-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #444;
+    text-align: left;
+    padding: 0 0 8px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .items-table th.r { text-align: right; }
+  .items-table td {
+    font-size: 13px;
+    padding: 7px 0;
+    border-top: 1px solid #1f1f1f;
+    color: #c8c4bc;
+  }
+  .items-table td.r { text-align: right; font-family: 'DM Mono', monospace; font-size: 12px; }
+  .items-table td.name { color: #e8e4dc; font-weight: 400; }
+  .items-table td.payer { text-align: right; }
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .tag-j { background: #1e2d3d; color: #5ba3d9; }
+  .tag-e { background: #1f2d1e; color: #6bbf6a; }
+  .attendees { color: #444; font-size: 11px; }
+
+  /* Individual totals */
+  .people-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .person-card {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .person-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: #888;
+    margin-bottom: 6px;
+  }
+  .person-net {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .net-owes { color: #e07070; }
+  .net-receives { color: #6bbf6a; }
+  .person-detail {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #444;
+    margin-top: 3px;
+  }
+
+  /* Couple balances */
+  .couple-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    background: #1a1a1a;
+    border: 1px solid #222;
+  }
+  .couple-name { font-size: 14px; font-weight: 500; color: #e8e4dc; }
+  .couple-members { font-size: 11px; color: #555; margin-top: 2px; }
+  .couple-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* Settlement */
+  .settlement-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 14px 16px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+  .s-from { font-size: 14px; font-weight: 500; color: #e8e4dc; min-width: 160px; }
+  .s-arrow {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    font-size: 18px;
+    position: relative;
+  }
+  .s-arrow::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 40px;
+    height: 1px;
+    background: #2a2a2a;
+  }
+  .s-to { font-size: 14px; font-weight: 500; color: #e8e4dc; min-width: 160px; text-align: right; }
+  .s-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    font-weight: 500;
+    color: #c8f07b;
+    min-width: 80px;
+    text-align: right;
+  }
+  .settlement-highlight {
+    border-color: #2a3a1a;
+    background: #161e10;
+  }
+
+  .divider { height: 1px; background: #1f1f1f; margin: 4px 0 8px; }
+
+  .footer {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid #1f1f1f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-label { font-family: 'DM Mono', monospace; font-size: 10px; color: #333; letter-spacing: 0.08em; }
+  .footer-total { font-family: 'DM Mono', monospace; font-size: 11px; color: #444; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="trip-label">Group trip · Langkawi</div>
+    <div class="header-top">
+      <div class="trip-title">Payment Breakdown</div>
+      <div class="currency-badge">AUD</div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- Item Breakdown -->
+    <div class="section">
+      <div class="section-label">Item breakdown</div>
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th class="r">Total</th>
+            <th class="r">Per person</th>
+            <th class="r">Paid by</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name">Old Town<br><span class="attendees">Justin, Phoebe, Evangel, Jess, Ivan</span></td>
+            <td class="r">$30.32</td><td class="r">$6.06</td>
+            <td class="payer"><span class="tag tag-j">Justin</span></td>
+          </tr>
+          <tr>
+            <td class="name">Yasmin<br><span class="attendees">Justin, Phoebe, Evangel, Jess, Ivan</span></td>
+            <td class="r">$22.26</td><td class="r">$4.45</td>
+            <td class="payer"><span class="tag tag-j">Justin</span></td>
+          </tr>
+          <tr>
+            <td class="name">Fish Farm<br><span class="attendees">Justin, Phoebe, Evangel, Jess, Ivan</span></td>
+            <td class="r">$335.04</td><td class="r">$67.01</td>
+            <td class="payer"><span class="tag tag-j">Justin</span></td>
+          </tr>
+          <tr>
+            <td class="name">Wonderland<br><span class="attendees">All 7</span></td>
+            <td class="r">$91.77</td><td class="r">$13.11</td>
+            <td class="payer"><span class="tag tag-j">Justin</span></td>
+          </tr>
+          <tr>
+            <td class="name">Pinang<br><span class="attendees">Justin, Evangel, Ivan, Jimmy</span></td>
+            <td class="r">$194.35</td><td class="r">$48.59</td>
+            <td class="payer"><span class="tag tag-j">Justin</span></td>
+          </tr>
+          <tr>
+            <td class="name">Golden Bamboo<br><span class="attendees">Phoebe, Annabel</span></td>
+            <td class="r">$32.26</td><td class="r">$16.13</td>
+            <td class="payer"><span class="tag tag-j">Justin</span></td>
+          </tr>
+          <tr>
+            <td class="name">Howdy<br><span class="attendees">Justin, Phoebe, Ivan, Jimmy, Annabel</span></td>
+            <td class="r">$110.21</td><td class="r">$22.04</td>
+            <td class="payer"><span class="tag tag-j">Justin</span></td>
+          </tr>
+          <tr>
+            <td class="name">Jet Ski<br><span class="attendees">Justin, Evangel, Ivan, Jimmy</span></td>
+            <td class="r">$896.00</td><td class="r">$224.00</td>
+            <td class="payer"><span class="tag tag-e">Evangel</span></td>
+          </tr>
+          <tr>
+            <td class="name">Roti<br><span class="attendees">All 7</span></td>
+            <td class="r">$29.51</td><td class="r">$4.22</td>
+            <td class="payer"><span class="tag tag-e">Evangel</span></td>
+          </tr>
+          <tr>
+            <td class="name">Car Rent + Fuel<br><span class="attendees">All 7</span></td>
+            <td class="r">$208.00</td><td class="r">$29.71</td>
+            <td class="payer"><span class="tag tag-e">Evangel</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Individual Totals -->
+    <div class="section">
+      <div class="section-label">Individual totals</div>
+      <div class="people-grid">
+        <div class="person-card">
+          <div class="person-name">Justin</div>
+          <div class="person-net net-receives">+$397.01</div>
+          <div class="person-detail">owes $419.19<br>paid $816.20</div>
+        </div>
+        <div class="person-card">
+          <div class="person-name">Phoebe</div>
+          <div class="person-net net-owes">−$162.73</div>
+          <div class="person-detail">owes $162.73<br>paid $0</div>
+        </div>
+        <div class="person-card">
+          <div class="person-name">Evangel</div>
+          <div class="person-net net-receives">+$736.36</div>
+          <div class="person-detail">owes $397.15<br>paid $1,133.51</div>
+        </div>
+        <div class="person-card">
+          <div class="person-name">Jess</div>
+          <div class="person-net net-owes">−$124.56</div>
+          <div class="person-detail">owes $124.56<br>paid $0</div>
+        </div>
+        <div class="person-card">
+          <div class="person-name">Ivan</div>
+          <div class="person-net net-owes">−$419.19</div>
+          <div class="person-detail">owes $419.19<br>paid $0</div>
+        </div>
+        <div class="person-card">
+          <div class="person-name">Jimmy</div>
+          <div class="person-net net-owes">−$341.67</div>
+          <div class="person-detail">owes $341.67<br>paid $0</div>
+        </div>
+        <div class="person-card">
+          <div class="person-name">Annabel</div>
+          <div class="person-net net-owes">−$85.21</div>
+          <div class="person-detail">owes $85.21<br>paid $0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Couple Balances -->
+    <div class="section">
+      <div class="section-label">Couple balances</div>
+      <div class="couple-row">
+        <div>
+          <div class="couple-name">Justin & Phoebe</div>
+          <div class="couple-members">+$397.01 − $162.73</div>
+        </div>
+        <div class="couple-amount net-receives">receives $234.28</div>
+      </div>
+      <div class="couple-row">
+        <div>
+          <div class="couple-name">Evangel & Jess</div>
+          <div class="couple-members">+$736.36 − $124.56</div>
+        </div>
+        <div class="couple-amount net-receives">receives $611.80</div>
+      </div>
+      <div class="couple-row">
+        <div>
+          <div class="couple-name">Jimmy & Annabel</div>
+          <div class="couple-members">−$341.67 − $85.21</div>
+        </div>
+        <div class="couple-amount net-owes">owes $426.88</div>
+      </div>
+      <div class="couple-row">
+        <div>
+          <div class="couple-name">Ivan</div>
+          <div class="couple-members">solo</div>
+        </div>
+        <div class="couple-amount net-owes">owes $419.19</div>
+      </div>
+    </div>
+
+    <!-- Final Settlement -->
+    <div class="section">
+      <div class="section-label">Final settlement — 3 transfers</div>
+
+      <div class="settlement-row settlement-highlight">
+        <div class="s-from">Jimmy & Annabel</div>
+        <div class="s-arrow">→</div>
+        <div class="s-to">Evangel & Jess</div>
+        <div class="s-amount">$426.88</div>
+      </div>
+      <div class="settlement-row settlement-highlight">
+        <div class="s-from">Ivan</div>
+        <div class="s-arrow">→</div>
+        <div class="s-to">Evangel & Jess</div>
+        <div class="s-amount">$184.92</div>
+      </div>
+      <div class="settlement-row settlement-highlight">
+        <div class="s-from">Ivan</div>
+        <div class="s-arrow">→</div>
+        <div class="s-to">Justin & Phoebe</div>
+        <div class="s-amount">$234.28</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-label">LGK · All amounts in AUD · 1 AUD = 2.83 MYR</div>
+      <div class="footer-total">Total trip spend: $1,949.72</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
